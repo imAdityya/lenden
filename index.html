@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hisaab Kitaab - Modern</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --lent-color: #ff6b6b;
+            --received-color: #51cf66;
+            --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-background: rgba(255, 255, 255, 0.95);
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --border-color: #e9ecef;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+            --border-radius-small: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--background);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: var(--card-background);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-heavy);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 8s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            text-align: center;
+            background: none;
+            outline: none;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .btn-success {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .customer-card {
+            background: white;
+            border-radius: var(--border-radius-small);
+            padding: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .customer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-gradient);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .customer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .customer-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .customer-delete-btn {
+            background: none;
+            border: none;
+            color: var(--lent-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            margin-left: 12px;
+        }
+
+        .customer-delete-btn:hover {
+            background: rgba(255, 107, 107, 0.1);
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        .customer-delete-btn:active {
+            transform: scale(0.95);
+        }
+
+        .customer-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .customer-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .customer-status {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .balance-display {
+            text-align: right;
+        }
+
+        .balance-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .lent-balance {
+            color: var(--lent-color);
+        }
+
+        .received-balance {
+            color: var(--received-color);
+        }
+
+        .balance-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius-small);
+            box-shadow: var(--shadow-light);
+        }
+
+        .balance-card {
+            text-align: center;
+            padding: 24px;
+            background: white;
+            border-radius: var(--border-radius-small);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .balance-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .balance-card .amount {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .transaction-form {
+            background: white;
+            border-radius: var(--border-radius-small);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .transaction-form h4 {
+            margin: 0 0 20px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .transaction-list {
+            background: white;
+            border-radius: var(--border-radius-small);
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .transaction-list h4 {
+            margin: 0;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            background: #f8f9fa;
+        }
+
+        .transaction-item {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-item:hover {
+            background: #f8f9fa;
+        }
+
+        .transaction-details {
+            flex-grow: 1;
+        }
+
+        .transaction-amount {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .transaction-message {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .transaction-date {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--lent-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 107, 107, 0.1);
+            transform: scale(1.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 16px 24px;
+            border-radius: var(--border-radius-small);
+            box-shadow: var(--shadow-medium);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: var(--received-color);
+        }
+
+        .toast.error {
+            background: var(--lent-color);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .content {
+                padding: 16px;
+            }
+
+            .header {
+                padding: 24px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="main-view">
+        <div class="header">
+            <h1>💰 Hisaab Kitaab</h1>
+            <p>Track your money with ease</p>
+        </div>
+        
+        <div class="content">
+            <button class="btn btn-primary" id="add-customer-btn">
+                ➕ Add New Customer
+            </button>
+
+            <div id="customer-list-container">
+                </div>
+        </div>
+    </div>
+
+    <div id="customer-form" class="hidden">
+        <div class="header">
+            <h1>👤 Add Customer</h1>
+            <p>Create a new customer account</p>
+        </div>
+        
+        <div class="content">
+            <div class="form-group">
+                <label class="form-label" for="customer-name-input">Customer Name</label>
+                <input type="text" class="form-input" id="customer-name-input" placeholder="Enter customer name">
+            </div>
+            
+            <button class="btn btn-secondary" id="back-to-main-btn">← Back to Customers</button>
+            <button class="btn btn-success" id="save-customer-btn">💾 Save Customer</button>
+        </div>
+    </div>
+
+    <div id="transaction-view" class="hidden">
+        <div class="header">
+            <h1 id="current-customer-name">Customer Name</h1>
+            <p>Manage transactions and view history</p>
+        </div>
+        
+        <div class="content">
+            <button class="btn btn-secondary" id="back-btn">← Back to Customers</button>
+            
+            <div class="balance-card">
+                <h3>Current Balance</h3>
+                <div id="current-customer-balance" class="amount">₹0</div>
+            </div>
+
+            <div class="transaction-form">
+                <h4>💸 Add Transaction</h4>
+                <div class="form-group">
+                    <label class="form-label" for="transaction-amount-input">Amount</label>
+                    <input type="number" class="form-input" id="transaction-amount-input" placeholder="Enter amount (e.g., 500)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="transaction-message-input">Message (Optional)</label>
+                    <textarea class="form-input" id="transaction-message-input" placeholder="Add a note (e.g., For groceries)" rows="3"></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-danger" id="lent-btn">💸 Lent Money</button>
+                    <button class="btn btn-success" id="received-btn">💰 Received Money</button>
+                </div>
+            </div>
+            
+            <div class="transaction-list">
+                <h4>📋 Transaction History</h4>
+                <div id="transaction-list-container">
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let customers = [];
+    let currentCustomerId = null;
+
+    // Data persistence functions using localStorage
+    function saveData() {
+        try {
+            localStorage.setItem('hisaab_kitaab_customers', JSON.stringify(customers));
+        } catch (e) {
+            console.error("Could not save data to localStorage.", e);
+        }
+    }
+
+    function initializeData() {
+        try {
+            const storedCustomers = localStorage.getItem('hisaab_kitaab_customers');
+            if (storedCustomers) {
+                customers = JSON.parse(storedCustomers);
+            }
+        } catch (e) {
+            console.error("Could not load data from localStorage.", e);
+            customers = [];
+        }
+        renderCustomers();
+    }
+
+    // UI Elements
+    const mainView = document.getElementById('main-view');
+    const customerForm = document.getElementById('customer-form');
+    const transactionView = document.getElementById('transaction-view');
+    const customerListContainer = document.getElementById('customer-list-container');
+    const addCustomerBtn = document.getElementById('add-customer-btn');
+    const saveCustomerBtn = document.getElementById('save-customer-btn');
+    const customerNameInput = document.getElementById('customer-name-input');
+    const backToMainBtn = document.getElementById('back-to-main-btn');
+    const backBtn = document.getElementById('back-btn');
+    const transactionAmountInput = document.getElementById('transaction-amount-input');
+    const transactionMessageInput = document.getElementById('transaction-message-input');
+    const lentBtn = document.getElementById('lent-btn');
+    const receivedBtn = document.getElementById('received-btn');
+    const currentCustomerName = document.getElementById('current-customer-name');
+    const currentCustomerBalance = document.getElementById('current-customer-balance');
+    const transactionListContainer = document.getElementById('transaction-list-container');
+
+    // Toast notification function
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 100);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => document.body.removeChild(toast), 300);
+        }, 3000);
+    }
+
+    // View management
+    function showMainView() {
+        mainView.classList.remove('hidden');
+        customerForm.classList.add('hidden');
+        transactionView.classList.add('hidden');
+        mainView.classList.add('fade-in');
+        renderCustomers();
+    }
+
+    function showCustomerForm() {
+        mainView.classList.add('hidden');
+        customerForm.classList.remove('hidden');
+        transactionView.classList.add('hidden');
+        customerForm.classList.add('fade-in');
+        customerNameInput.value = ''; // Clear input on view change
+        setTimeout(() => customerNameInput.focus(), 100);
+    }
+
+    function showTransactionView(customer) {
+        currentCustomerId = customer.id;
+        mainView.classList.add('hidden');
+        customerForm.classList.add('hidden');
+        transactionView.classList.remove('hidden');
+        transactionView.classList.add('fade-in');
+        renderTransactions(customer);
+    }
+ // Render functions
+    function renderCustomers() {
+        customerListContainer.innerHTML = '';
+        
+        if (customers.length === 0) {
+            customerListContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">👥</div>
+                    <p>No customers added yet.<br>Click "Add New Customer" to get started!</p>
+                </div>
+            `;
+            return;
+        }
+
+        customers.forEach(customer => {
+            const card = document.createElement('div');
+            card.className = 'customer-card';
+            card.innerHTML = `
+                <div class="customer-info">
+                    <div class="customer-name">${customer.name}</div>
+                    <div class="customer-status">${customer.balance > 0 ? 'You will receive' : 'You have to pay'}</div>
+                </div>
+                <div class="balance-display">
+                    <div class="balance-amount ${customer.balance > 0 ? 'received-balance' : 'lent-balance'}">₹${Math.abs(customer.balance).toFixed(2)}</div>
+                    <div class="balance-label">${customer.balance > 0 ? 'You will receive' : 'You have to pay'}</div>
+                </div>
+                <button class="customer-delete-btn" data-customer-id="${customer.id}">🗑️</button>
+            `;
+            card.addEventListener('click', (e) => {
+                if (!e.target.closest('.customer-delete-btn')) {
+                    showTransactionView(customer);
+                }
+            });
+            card.querySelector('.customer-delete-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteCustomer(customer.id);
+            });
+            customerListContainer.appendChild(card);
+        });
+    }
+
+    function renderTransactions(customer) {
+        currentCustomerName.textContent = customer.name;
+        currentCustomerBalance.textContent = `₹${Math.abs(customer.balance).toFixed(2)}`;
+        currentCustomerBalance.className = `amount ${customer.balance >= 0 ? 'received-balance' : 'lent-balance'}`;
+        transactionListContainer.innerHTML = '';
+
+        if (customer.transactions.length === 0) {
+            transactionListContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <p>No transactions yet.<br>Add one to get started!</p>
+                </div>
+            `;
+            return;
+        }
+
+        const sortedTransactions = customer.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        sortedTransactions.forEach(transaction => {
+            const item = document.createElement('div');
+            item.className = 'transaction-item';
+            const transactionType = transaction.type === 'lent' ? 'Lent to' : 'Received from';
+            const amountClass = transaction.type === 'lent' ? 'lent-balance' : 'received-balance';
+
+            item.innerHTML = `
+                <div class="transaction-details">
+                    <div class="transaction-amount ${amountClass}">₹${transaction.amount.toFixed(2)}</div>
+                    <div class="transaction-message">${transaction.message || 'No message'}</div>
+                    <div class="transaction-date">${new Date(transaction.date).toLocaleString()}</div>
+                </div>
+                <button class="delete-btn" data-transaction-id="${transaction.id}">🗑️</button>
+            `;
+            item.querySelector('.delete-btn').addEventListener('click', () => {
+                deleteTransaction(customer.id, transaction.id);
+            });
+            transactionListContainer.appendChild(item);
+        });
+    }
+
+    // Data manipulation functions
+    function deleteCustomer(customerId) {
+        if (confirm('Are you sure you want to delete this customer and all their transactions?')) {
+            customers = customers.filter(c => c.id !== customerId);
+            saveData();
+            renderCustomers();
+            showToast('Customer deleted successfully!');
+        }
+    }
+
+    function deleteTransaction(customerId, transactionId) {
+        const customer = customers.find(c => c.id === customerId);
+        if (customer) {
+            const transactionIndex = customer.transactions.findIndex(t => t.id === transactionId);
+            if (transactionIndex !== -1) {
+                const transaction = customer.transactions[transactionIndex];
+                if (transaction.type === 'lent') {
+                    customer.balance -= transaction.amount;
+                } else {
+                    customer.balance += transaction.amount;
+                }
+                customer.transactions.splice(transactionIndex, 1);
+                saveData();
+                renderTransactions(customer);
+                showToast('Transaction deleted successfully!');
+            }
+        }
+    }
+
+    // Event Listeners
+    addCustomerBtn.addEventListener('click', showCustomerForm);
+    backToMainBtn.addEventListener('click', showMainView);
+    backBtn.addEventListener('click', showMainView);
+
+    saveCustomerBtn.addEventListener('click', () => {
+        const name = customerNameInput.value.trim();
+        if (name) {
+            const newCustomer = {
+                id: Date.now(),
+                name: name,
+                balance: 0,
+                transactions: []
+            };
+            customers.push(newCustomer);
+            saveData();
+            customerNameInput.value = '';
+            showMainView();
+            showToast('Customer added successfully!');
+        } else {
+            showToast('Please enter a customer name.', 'error');
+        }
+    });
+
+    lentBtn.addEventListener('click', () => {
+        const amount = parseFloat(transactionAmountInput.value);
+        const message = transactionMessageInput.value.trim();
+        if (isNaN(amount) || amount <= 0) {
+            showToast('Please enter a valid amount.', 'error');
+            return;
+        }
+        const customer = customers.find(c => c.id === currentCustomerId);
+        if (customer) {
+            customer.balance -= amount; // Lent money decreases your balance, so it's a negative value
+            customer.transactions.push({
+                id: Date.now(),
+                type: 'lent',
+                amount: amount,
+                message: message,
+                date: new Date().toISOString()
+            });
+            saveData();
+            renderTransactions(customer);
+            transactionAmountInput.value = '';
+            transactionMessageInput.value = '';
+            showToast('Transaction added successfully!');
+        }
+    });
+
+    receivedBtn.addEventListener('click', () => {
+        const amount = parseFloat(transactionAmountInput.value);
+        const message = transactionMessageInput.value.trim();
+        if (isNaN(amount) || amount <= 0) {
+            showToast('Please enter a valid amount.', 'error');
+            return;
+        }
+        const customer = customers.find(c => c.id === currentCustomerId);
+        if (customer) {
+            customer.balance += amount; // Received money increases your balance, so it's a positive value
+            customer.transactions.push({
+                id: Date.now(),
+                type: 'received',
+                amount: amount,
+                message: message,
+                date: new Date().toISOString()
+            });
+            saveData();
+            renderTransactions(customer);
+            transactionAmountInput.value = '';
+            transactionMessageInput.value = '';
+            showToast('Transaction added successfully!');
+        }
+    });
+    
+    // Initial setup
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeData();
+        showMainView();
+    });
+
+</script>
+</body>
+</html>
